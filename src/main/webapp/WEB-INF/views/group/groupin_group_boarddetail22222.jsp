@@ -581,46 +581,51 @@ cursor: pointer;
 											<c:set var = "before" value = "0"/>
 											<ul class = "we-comet">
 												<c:forEach var = "c" items = "${comment}">
-													<!-- 원문글의 댓글 -->
-													<c:if test="${c.commemtReRef != before && before > 0}">
-														</li>
-													</c:if>
-													<c:if test="${c.commemtReRef != before}">
-														<li>
-															<div class="comet-avatar">
-																<!-- 회원 프사 없을 경우 -->
-																<c:if test="${c.profileFile == null}">
-																	<img src="resources/images/default.png" class="group-img" alt="" />
-																</c:if>
-																<!-- 회원 프사 있을 경우 -->
-																<c:if test="${c.profileFile != null}">
-																	<img src="<spring:url value='/image${c.profileFile}'/>" class="group-img" alt="" />
-																</c:if>
-															</div>
-															<div class="we-comment">
-																<div class="coment-head">
-																	<h5>
-																		<a href="javascript:memDetail(${groupkey},${c.userKey})" title="">${c.groupNickname}</a>
-																	</h5>
-																	<span>${c.commentDate}</span> 
-																	<a class="we-reply" href="javascript:commentReply(${c.commnetNum})" title = "Reply"> 
-																		<i class="fa fa-reply"></i>
-																	</a>
-																	<!-- 댓쓴 본인이어야만 수정/삭제 보이게 -->
-																	<c:if test = "${loginuser == c.userKey}">
-																		<a class="update" href="javascript:updateReply(${c.commnetNum})" title = "Update"> 
-																			<i class="fas fa-eraser"></i>
-																		</a>
-																		<a class="delete" href="javascript:deleteReply(${c.commnetNum})" title = "Delete"> 
-																			<i class="far fa-trash-alt"></i>
-																		</a>
+													<!-- 댓글 -->
+													<!-- ************************************************ -->
+													
+													<!-- 전체공개 댓글 - 그냥 조건 없이 쫙 뽑는다. -->
+													<c:if test="${c.commentshow == 0}">
+														<c:if test="${c.commemtReRef != before && before > 0}">
+															</li>
+														</c:if>
+														<c:if test="${c.commemtReRef != before}">
+															<li>
+																<div class="comet-avatar">
+																	<!-- 회원 프사 없을 경우 -->
+																	<c:if test="${c.profileFile == null}">
+																		<img src="resources/images/default.png" class="group-img" alt="" />
+																	</c:if>
+																	<!-- 회원 프사 있을 경우 -->
+																	<c:if test="${c.profileFile != null}">
+																		<img src="<spring:url value='/image${c.profileFile}'/>" class="group-img" alt="" />
 																	</c:if>
 																</div>
-																<p>${c.commentContent}</p>
-															</div> 
+																<div class="we-comment">
+																	<div class="coment-head">
+																		<h5>
+																			<a href="javascript:memDetail(${groupkey},${c.userKey})" title="">${c.groupNickname}</a>
+																		</h5>
+																		<span>${c.commentDate}</span> 
+																		<a class="we-reply" href="javascript:commentReply(${c.commnetNum})" title="Reply"> 
+																			<i class="fa fa-reply"></i>
+																		</a>
+																		<!-- 댓쓴 본인이어야만 수정/삭제 보이게 -->
+																		<c:if test="${loginuser == c.userKey}">
+																			<a class="update"
+																				href="javascript:updateReply(${c.commnetNum})"
+																				title="Update"> <i class="fas fa-eraser"></i>
+																			</a>
+																			<a class="delete"
+																				href="javascript:deleteReply(${c.commnetNum})"
+																				title="Delete"> <i class="far fa-trash-alt"></i>
+																			</a>
+																		</c:if>
+																	</div>
+																	<p>${c.commentContent}</p>
+																</div> 
 														</c:if>
-														
-														<!-- 대댓 -->
+														<!-- 원문글에 대한 댓글 -->
 														<c:if test="${c.commemtReRef == before}">
 															<ul>
 																<li>
@@ -639,17 +644,19 @@ cursor: pointer;
 																					<h5>
 																						<a href="javascript:memDetail(${groupkey},${c.userKey})" title="">${c.groupNickname}</a>
 																					</h5>
-																					<span>${c.commentDate}</span> 
-																					<a class="we-reply" href="javascript:commentReply(${c.commnetNum})" title="Reply"> 
-																						<i class="fa fa-reply"></i>
+																					<span>${c.commentDate}</span> <a class="we-reply"
+																						href="javascript:commentReply(${c.commnetNum})"
+																						title="Reply"> <i class="fa fa-reply"></i>
 																					</a>
 																					<!-- 댓쓴 본인이어야만 수정/삭제 보이게 -->
 																					<c:if test="${loginuser == c.userKey}">
-																						<a class="update" href="javascript:updateReply(${c.commnetNum})" title="Update"> 
-																							<i class="fas fa-eraser"></i>
+																						<a class="update"
+																							href="javascript:updateReply(${c.commnetNum})"
+																							title="Update"> <i class="fas fa-eraser"></i>
 																						</a>
-																						<a class="delete" href="javascript:deleteReply(${c.commnetNum})" title="Delete"> 
-																							<i class="far fa-trash-alt"></i>
+																						<a class="delete"
+																							href="javascript:deleteReply(${c.commnetNum})"
+																							title="Delete"> <i class="far fa-trash-alt"></i>
 																						</a>
 																					</c:if>
 																				</div>
@@ -659,8 +666,98 @@ cursor: pointer;
 																	</ul>
 															    </c:if>
 															<!-- 원문글 끝 -->
+													</c:if>
+													<!-- 전체공개 댓글 끝 -->
+													
+													<!-- 비밀공개 댓글 - 로그인한 사람이 글쓴이거나 댓쓴이여야 보인다. -->
+													<c:if test="${c.commentshow == 1}">
+														<c:if test="${c.commemtReRef != before && before > 0}">
+															</li>
+														</c:if>
+														<!-- 원문글 -->
+														<c:if test="${c.commemtReRef != before}">
+														<!-- ## 로그인한 유저가 글쓴이거나 댓쓴이일 때 ## -->
+														<c:if test="${loguser == c.userKey || loginuser == post.userKey}">
+															<li>
+																<div class="comet-avatar">
+																	<!-- 회원 프사 없을 경우 -->
+																	<c:if test="${c.profileFile == null}">
+																		<img src="resources/images/default.png"
+																			class="group-img" alt="" />
+																	</c:if>
+																	<!-- 회원 프사 있을 경우 -->
+																	<c:if test="${c.profileFile != null}">
+																		<img src="<spring:url value='/image${c.profileFile}'/>"
+																			class="group-img" alt="" />
+																	</c:if>
+																</div>
+																<div class="we-comment">
+																	<div class="coment-head">
+																		<h5>
+																			<a
+																				href="javascript:memDetail(${groupkey},${c.userKey})"
+																				title="">${c.groupNickname}</a>
+																		</h5>
+																		<span>${c.commentDate}</span> <a class="we-reply"
+																			href="javascript:commentReply(${c.commnetNum})"
+																			title="Reply"> <i class="fa fa-reply"></i>
+																		</a>
+																		<!-- 댓쓴 본인이어야만 수정/삭제 보이게 -->
+																		<c:if test="${loginuser == c.userKey}">
+																			<a class="update"
+																				href="javascript:updateReply(${c.commnetNum})"
+																				title="Update"> <i class="fas fa-eraser"></i>
+																			</a>
+																			<a class="delete"
+																				href="javascript:deleteReply(${c.commnetNum})"
+																				title="Delete"> <i class="far fa-trash-alt"></i>
+																			</a>
+																		</c:if>
+																	</div>
+																	<p>${c.commentContent}</p>
+																</div>
+															</c:if>
+															<!-- 원문글 끝 -->
+															<!-- 원문글에 대한 댓글 -->
+															<c:if test="${c.commemtReRef == before}">
+																<ul>
+																	<!-- ## 로그인한 유저가 글쓴이거나 댓쓴이가 아닐 때 ## -->
+																	<li>
+																		<div class="comet-avatar">
+																			<!-- 회원 프사 없을 경우 -->
+																			<c:if test="${c.profileFile == null}">
+																				<img src="resources/images/default.png"
+																					class="group-img" alt="" />
+																			</c:if>
+																			<!-- 회원 프사 있을 경우 -->
+																			<c:if test="${c.profileFile != null}">
+																				<img src="<spring:url value='/image${c.profileFile}'/>"
+																					class="group-img" alt="" />
+																			</c:if>
+																		</div>
+																		<div class="we-comment">
+																			<div class="coment-head">
+																				<h5>
+																					<a
+																						href="javascript:memDetail(${groupkey},${c.userKey})"
+																						title="">${c.groupNickname}</a>
+																				</h5>
+																				<span>${c.commentDate}</span>
+																			</div>
+																			<button type="button" class="secretbtn">
+																				<i class="fas fa-lock" aria-hidden="true"></i>
+																			</button>
+																			<p style="display: inline-block">비밀 댓글 입니다.</p>
+																		</div>
+																	</li>
+																</ul>	
+														</c:if>
+													</c:if>
+													</c:if>
+													<!-- 비밀댓글 끝 -->
+													<c:set var="before" value="${c.commemtReRef}" />
 												</c:forEach>
-												<!-- 댓글 -->
+											<!-- 댓글 -->
 
 												<!-- 댓글 등록 부분 -->
 												<li class="post-comment">
