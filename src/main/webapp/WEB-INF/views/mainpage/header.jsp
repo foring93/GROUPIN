@@ -336,13 +336,10 @@ list-style: none;
 	
 			
 			function checkmessage(){
-				
 				$.ajax({
 					url : "getMyMessage",
 					success : function(result){
 						//메세지 필터
-						
-						
 						if(result != null || result.length != 0){
 							
 						var msg = result.filter(function (item) {
@@ -360,8 +357,6 @@ list-style: none;
 					}
 					}
 				});
-				
-			
 			}
 		
 			

@@ -45,4 +45,8 @@ public class GroupCommentDAO {
 	public int getCommentCount(Map<String, Object> data) {
 		return sqlSession.selectOne("comment.getCommentCount", data);
 	}
+
+	public String getContent(int commentNo) {
+		return sqlSession.selectOne("comment.getContent", commentNo);
+	}
 }

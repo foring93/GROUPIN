@@ -6,8 +6,7 @@
 	<select id="getPic" resultType="groupmember" parameterType="map">
 		SELECT *
 		FROM GGROUPMEMBER
-		WHERE USERKEY = #{userkey} AND GROUPKEY =
-		#{groupkey}
+		WHERE USERKEY = #{userkey} AND GROUPKEY = #{groupkey}
 	</select>
 
 

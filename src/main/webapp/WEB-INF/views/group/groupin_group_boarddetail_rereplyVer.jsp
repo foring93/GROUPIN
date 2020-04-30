@@ -75,8 +75,7 @@ button[type=submit] {
 }
 
 .coment-head a {
-	padding-left : 5px;
-	padding-right: 5px;
+	padding-right: 10px;
 }
 
 textarea:hover {
@@ -645,6 +644,9 @@ cursor: pointer;
 																		<a href="javascript:memDetail(${groupkey},${c.userKey})" title="">${c.groupNickname}</a>
 																	</h5>
 																	<span>${c.commentDate}</span> 
+																	<a class="we-reply" href="javascript:commentReply(${c.commnetNum})" title="Reply"> 
+																		<i class="fa fa-reply"></i>
+																	</a>
 																	<!-- 댓쓴 본인이어야만 수정/삭제 보이게 -->
 																	<c:if test="${loginuser == c.userKey}">
 																		<a class="update" href="javascript:updateReply(${c.commnetNum})" title="Update"> 
@@ -734,32 +736,13 @@ function commentReply(commentNo) {
 	console.log('답댓 달 댓글의 번호 = ' + commentNo);
 }; // reply end
 
-/**** 댓글 수정 ****/
-function updateReply(commentNo) {
-	$('.post-comt-box textarea').css('background', '#088dcd1a').focus();
-	$('input[name=commentType]').val(2); // 수정 : 2
-	$('input[name=commentNum]').val(commentNo);
-	$.ajax({
-		url : 'getOriginReply',
-		type : 'post',
-		data : {commentNo : commentNo},
-		cache : false,
-		success : function(data) {
-			console.log('수정할 댓글 출력');
-			$('.post-comt-box textarea').text(data);
-		}, error : function(request, status, error) {
-			console.log("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
-		}
-	}); // ajax end
-} // function updateReply end
-
 /**** 댓글 삭제 ****/ 
-function deleteReply(commentNo) {
+function deleteReply(num) {
 	var doc = '';
 	var answer = confirm('댓글을 삭제하시겠습니까?');
 	console.log('groupkey = ' + $('#detailGroupKey').val());
 	console.log('postkey = ' + $('#detailPostKey').val());
-	var data = 'commentnum=' + commentNo + '&groupkey=' + $('#detailGroupKey').val() + '&postkey=' + $('#detailPostKey').val();
+	var data = 'commentnum=' + num + '&groupkey=' + $('#detailGroupKey').val() + '&postkey=' + $('#detailPostKey').val();
 	if (answer) {
 		$.ajax({
 			url : 'deleteReply',
@@ -955,16 +938,6 @@ $(function() {
 			url = 'commentReply';
 			replyAction(data, url);
 			break;
-		case "2":
-			/* 댓글 수정 */
-			data = 'postkey=' + $('#detailPostKey').val()
-					+ '&groupkey=' + $('#detailGroupKey').val()
-					+ '&content=' + $('.post-comt-box textarea').val()
-					//+ '&commentshow=' + $('input[name=commentshow]').val()
-					+ '&commentnum=' + $('input[name=commentNum]').val();
-			url = 'updateReply';
-			replyAction(data, url);
-			break;
 		};
 	}); // submit end
 
@@ -1046,6 +1019,7 @@ $(function() {
 							doc += '			<div class="coment-head">';
 							doc += '				<h5><a href="javascript:memDetail(' + item.groupKey + ',' + item.userKey + ')" title="">' + item.groupNickname + '</a></h5>';
 							doc += '				<span>' + item.commentDate + '</span>';
+							doc += '				<a class="we-reply" href="javascript:commentReply(' + item.commnetNum + ')" title="Reply"><i class="fa fa-reply"></i></a>';
 							
 							/* 댓쓴이어야 수정/삭제 보이게 */
 							if (data.loginuser == item.userKey) {

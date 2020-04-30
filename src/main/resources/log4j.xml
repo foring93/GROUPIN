@@ -15,10 +15,6 @@
 		<level value = "trace"/>
 	</logger>
 	
-		<!-- message -->
-	<logger name = "message">
-		<level value = "trace"/>
-	</logger>
 	
 	<!-- comment -->
 	<logger name = "comment">

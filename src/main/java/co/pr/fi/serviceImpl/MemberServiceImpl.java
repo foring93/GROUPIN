@@ -44,7 +44,6 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public GUsers getUsers(String id) {
-		
 		return dao.getUsers(id);
 	}
 

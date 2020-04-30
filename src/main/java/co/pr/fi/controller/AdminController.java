@@ -71,14 +71,9 @@ public class AdminController {
 			//해당 신고내용 삭제
 			GUsers users = memberService.getUsers(userId);
 			return adminService.deletePolice(users.getUserKey());
-			
-			
-			
-		}else {
-			
+		} else {
 			return 0;
 		}
-		
 	}
 	
 	
@@ -472,8 +467,7 @@ public class AdminController {
 
 	@ResponseBody
 	@PostMapping("/adminusers")
-	public List<GUsers> adminusers2(@RequestParam(value = "type", defaultValue = "1") int type,
-			@RequestParam(value = "page", defaultValue = "1") int page) {
+	public List<GUsers> adminusers2(@RequestParam(value = "type", defaultValue = "1") int type, @RequestParam(value = "page", defaultValue = "1") int page) {
 
 		// 한 페이지에 보여줄 갯수
 		int limit = 10;

@@ -19,7 +19,7 @@ public class ScheduledlTask {
 	@Autowired
 	AdminService adminService;
 
-	@Scheduled(cron = "00 30 * * * *")
+	//@Scheduled(cron = "00 30 * * * *")
 	public void stopCancelUsers() throws Exception {
 
 		int result = adminService.stopCancelUsers();
@@ -33,7 +33,7 @@ public class ScheduledlTask {
 	}
 	
 	
-	@Scheduled(cron = "00 30 * * * *")
+	//@Scheduled(cron = "00 30 * * * *")
 	public void deleteFiles() throws Exception {
 
 		//휴지통 파일 리스트 가져오기

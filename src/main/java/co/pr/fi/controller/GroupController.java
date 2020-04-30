@@ -1218,12 +1218,15 @@ public class GroupController {
 		return "redirect:groupin_group_board_transfer.net?groupkey=" + groupkey +"&boardkey="+ boardkey + "&boardtype="+boardtype;
 	}
 	
-	
+	/* 게시글 상세보기 */
 	@GetMapping("/group_boarddetail.net")
-
-	public ModelAndView group_boarddetail(@RequestParam(value = "groupkey") int groupkey,@RequestParam(value = "postkey") int postkey,@RequestParam(value = "boardkey") int boardkey,@RequestParam(value = "boardtype") String boardtype, @RequestParam(required = false, defaultValue = "1") int page,
-										  @RequestParam(required = false, defaultValue = "10") int limit, ModelAndView mv,
-			HttpServletResponse response, HttpSession session) throws IOException {
+	public ModelAndView group_boarddetail(@RequestParam(value = "groupkey") int groupkey,
+										  @RequestParam(value = "postkey") int postkey,
+										  @RequestParam(value = "boardkey") int boardkey,
+										  @RequestParam(value = "boardtype") String boardtype, 
+										  @RequestParam(required = false, defaultValue = "1") int page,
+										  @RequestParam(required = false, defaultValue = "10") int limit, 
+										  ModelAndView mv, HttpServletResponse response, HttpSession session) throws IOException {
 		String id = "";
 		int userkey = -1;
 		int loginuser = -1;
