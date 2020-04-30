@@ -50,6 +50,7 @@ public class GroupCommentServiceImpl implements GroupCommentService {
 		// 삭제하는 댓글의 참조번호, 댓글 깊이, 댓글 순서 파악을 위해 정보를 가져온다.
 		GComment co = dao.getDetail(commentnum);
 		if (co != null) {
+			System.out.println("###### refno" + co.getCommemtReRef());
 			return dao.commentDelete(co);
 		}
 		return result;
@@ -58,5 +59,10 @@ public class GroupCommentServiceImpl implements GroupCommentService {
 	@Override
 	public int getCommentCount(Map<String, Object> data) {
 		return dao.getCommentCount(data);
+	}
+
+	@Override
+	public String getContent(int commentNo) {
+		return dao.getContent(commentNo);
 	}
 }
