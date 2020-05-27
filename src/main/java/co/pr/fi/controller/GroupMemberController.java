@@ -257,8 +257,7 @@ public class GroupMemberController {
 									@RequestParam(required = false, defaultValue = "10") int limit,
 									ModelAndView mv, HttpSession session) {
 		
-		System.out.println("### 모임 회원 상세정보 POST ###");
-		System.out.println("##### " + "userkey = " + userkey + " | groupkey = " + groupkey + " | status = " + status + " #####");
+		System.out.println("모임 회원 상세정보 조회 Controller");
 		
 		Map<String, Object> temp = new HashMap<String, Object>();
 		List<GGroup> groupList = new ArrayList<GGroup>();
@@ -277,22 +276,24 @@ public class GroupMemberController {
 		int listcount = 0;
 		
 		/*** 모임 상관없이 내가 작성한 글이나 내가 작성한 댓글 보기 ***/
-		System.out.println("내가 작성한 글 / 내가 작성한 댓글 보기");
 		switch (status) {
 		case 0 :
-			/*** 가입한 모임 - 모임은 누구나 다 볼 수 있기 때문에 조건이 없다. ***/
+			System.out.println("가입한 모임 조회");
+			/* 가입한 모임 - 모임은 누구나 다 볼 수 있기 때문에 조건이 없다. */
 			listcount = groupMemberService.getJoinedCount(userkey);				// 총 가입한 모임 수 		
 			groupList = groupMemberService.userInGroup(userkey, page, limit); 	// 가입한 모임 리스트
 			temp = pagination(page, limit, listcount);							// 페이지네이션
 			break;
 		case 1:
 			if (loginuser == userkey) {
-				/*** 본인의 작성글 조회 - 모임에 상관없이 가져온다. ***/
+				System.out.println("본인 작성글 조회");
+				/* 본인의 작성글 조회 - 모임에 상관없이 가져온다. */
 				listcount = groupMemberService.getMyPostCount(loginuser);		// 내가 작성한 글의 개수
 				postList = groupMemberService.getMyPost(loginuser, page, limit);// 내가 작성한 글 리스트
 				temp = pagination(page, limit, listcount);						// 페이지네이션
 			} else {
-				/*** 타인의 작성글 조회 - 현재 모임에서 작성한 글만 가져온다. ***/ 
+				/* 타인의 작성글 조회 - 현재 모임에서 작성한 글만 가져온다. */ 
+				System.out.println("타인 작성글 조회");
 				temp.put("userkey", userkey);
 				temp.put("groupkey", groupkey);
 					
@@ -303,11 +304,13 @@ public class GroupMemberController {
 			break;
 		case 2:
 			if (loginuser == userkey) {
-				/*** 본인의 작성 댓글 조회 - 모임에 상관없이 가져온다. ***/
+				System.out.println("본인 댓글 조회");
+				/* 본인의 작성 댓글 조회 - 모임에 상관없이 가져온다. */
 				listcount = groupMemberService.getMyCommentCount(loginuser);		// 내가 작성한 댓글의 개수
 				postList = groupMemberService.getMyComment(loginuser, page, limit);	// 내가 작성한 댓글 리스트
 				temp = pagination(page, limit, listcount);							// 페이지네이션
 			} else {
+				System.out.println("타인 댓글 조회");
 				temp.put("userkey", userkey);		// 현재 조회하려는 회원의 유저키
 				temp.put("groupkey", groupkey);		// 현재 모임키
 				temp.put("loginuser", loginuser);	// 현재 로그인한 유저의 유저키
@@ -318,6 +321,7 @@ public class GroupMemberController {
 			}
 			break;
 		}
+		
 		mv.addObject("page", page);
 		mv.addObject("maxpage", temp.get("maxpage"));
 		mv.addObject("startpage", temp.get("startpage"));
@@ -363,6 +367,7 @@ public class GroupMemberController {
 		List<UserRegGroup> userreggroup = groupservice.userreggroup(userkey);
 		mv.addObject("userreggroup", userreggroup);
 		mv.addObject("userreggroupcount", userreggroup.size());
+		
 		for(int i = 0; i < groupcalendarlist.size();i++) {
 			if(Integer.parseInt(groupcalendarlist.get(i).getStartdate())==date) {
 				int d = Integer.parseInt(groupcalendarlist.get(i).getStartdate());
@@ -386,8 +391,7 @@ public class GroupMemberController {
 							 @RequestParam(required = false, defaultValue = "1") int page,
 							 @RequestParam(required = false, defaultValue = "10") int limit,
 							 HttpSession session) {
-		System.out.println("### 모임 회원 상세정보 Ajax ###");
-		System.out.println("userkey = " + userkey + " | groupkey = " + groupkey + " | status = " + status);
+		System.out.println("모임 회원 상세정보 Ajax");
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, Object> temp = new HashMap<String, Object>();
@@ -402,12 +406,14 @@ public class GroupMemberController {
 		switch (status) {
 		case 0 :
 			/*** 가입한 모임 ***/
+			System.out.println("가입한 모임 조회");
 			listcount = groupMemberService.getJoinedCount(userkey);	// 가입한 모임의 수
 			groupList = groupMemberService.userInGroup(userkey, page, limit);
 			temp = pagination(page, limit, listcount);
 			break;
 		case 1 :
 			/*** 작성한 글 ***/
+			System.out.println("본인 글 조회");
 			temp.put("userkey", userkey);
 			temp.put("groupkey", groupkey);
 			
@@ -418,6 +424,7 @@ public class GroupMemberController {
 			break;
 		case 2 : 
 			/*** 작성한 댓글 ***/
+			System.out.println("본인 댓글 조회");
 			temp.put("userkey", userkey);
 			temp.put("groupkey", groupkey);
 			
@@ -427,6 +434,7 @@ public class GroupMemberController {
 			break;
 		case 3 :
 			/*** 작성한 가입양식 ***/
+			System.out.println("본인 가입양식 조회");
 			temp.put("userkey", userkey);
 			temp.put("groupkey", groupkey);
 			
@@ -453,9 +461,10 @@ public class GroupMemberController {
 		}
 		
 		result.put("status", status);
+		
 		if (status != 3) {
-			result.put("list", postList);
-			result.put("list", groupList);
+			if (!postList.isEmpty()) result.put("list", postList);
+			if (!groupList.isEmpty()) result.put("list", groupList);
 			result.put("page", page);
 			result.put("maxpage", temp.get("maxpage"));
 			result.put("startpage", temp.get("startpage"));
@@ -471,7 +480,6 @@ public class GroupMemberController {
 	@PostMapping("/groupNickCheck")
 	public String nickCheck (String nickname, String groupkey) {
 		System.out.println("### 닉네임 체크 ### " + nickname);
-		System.out.println("체크크크크ㅡ크크" + groupkey);
 		Map<String, Object> check = new HashMap<String, Object>();
 		check.put("nickname", nickname);
 		check.put("groupkey", groupkey);

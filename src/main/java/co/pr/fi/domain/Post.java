@@ -74,7 +74,16 @@ public class Post {
 	private String minute;
 	private String boardtype;
 	private String boardmap;
+	private String boardname;
 	
+	public String getBoardname() {
+		return boardname;
+	}
+
+	public void setBoardname(String boardname) {
+		this.boardname = boardname;
+	}
+
 	public String getBoardmap() {
 		return boardmap;
 	}

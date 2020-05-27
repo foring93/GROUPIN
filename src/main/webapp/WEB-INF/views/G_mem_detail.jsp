@@ -561,17 +561,17 @@ top:-9px;
 									</thead>
 									<tbody>
 										<!-- 작성글이 있는 경우 -->
-										<c:if test="${listcount > 0}">
-											<c:forEach var="b" items="${list}">
+										<c:if test = "${listcount > 0}">
+											<c:forEach var = "b" items = "${list}">
 												<tr>
-													<td><a href="javascript:board(${b.postKey},${b.groupKey})" title="${b.postTitle}">${b.postTitle}</a></td>
+													<td><a href="group_boarddetail.net?groupkey=${b.groupKey}&postkey=${b.postKey}&boardkey=${b.boardkey}&boardtype=${boardtype}">${b.postTitle}</a></td>
 													<td>${b.postReadcount}</td>
 													<td>${b.postDate}</td>
 												</tr>
 											</c:forEach>
 										</c:if>
 										<!-- 작성글이 없는 경우 -->
-										<c:if test="${listcount == 0}">
+										<c:if test = "${listcount == 0}">
 											<tr>
 												<td colspan="3">작성한 글이 없습니다.</td>
 											</tr>
@@ -597,12 +597,12 @@ top:-9px;
 													<td>
 														<div class="comment-info">
 															<span>
-																<a href="javascript:board(${b.postKey},${b.groupKey})" title="${b.commentContent}">${b.commentContent}</a>
+																<a href="group_boarddetail.net?groupkey=${b.groupKey}&postkey=${b.postKey}&boardkey=${b.boardkey}&boardtype=${boardtype}">${b.commentContent}</a>
 															</span>
 														</div>
 														<div class="comment-subject">
 															<span>
-																<a href="javascript:board(${b.postKey},${b.groupKey})" title="${b.postTitle}">${b.postTitle}</a>
+																<a href="group_boarddetail.net?groupkey=${b.groupKey}&postkey=${b.postKey}&boardkey=${b.boardkey}&boardtype=${boardtype}">${b.postTitle}</a>
 															</span> 
 															<span class="comment-num">[${b.replyCount}]</span>
 														</div>
@@ -675,6 +675,7 @@ top:-9px;
 </div>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
+/* 
 //가입한 모임 페이지로 이동
 function goGroup(groupkey) {
 	var f = document.myForm;		// 폼 name
@@ -684,6 +685,7 @@ function goGroup(groupkey) {
 	f.submit();						// 폼 전송
 };
 
+ 
 // 게시글 페이지로 이동
 function board(postkey, groupkey) {
 	var f = document.myForm;		// 폼 name
@@ -693,6 +695,7 @@ function board(postkey, groupkey) {
 	f.method = "post";				// POST 방식으로 데이터 전송
 	f.submit();						// 폼 전송
 }
+*/
 
 function go(page) {
 	var data = "status=" + $('#status').val() + "&page=" + page + "&userkey=" + $('#userkey').val() + "&groupkey=" + $('#groupkey').val();
@@ -741,7 +744,7 @@ function viewList(call) {
 	}); // ajax end
 }; // function go end
 
-/* ##### 가입한 모임 ##### */
+/**** 가입한 모임 ****/
 function signedGroup (data) {
 	console.log(data.list);
 	doc += '<table class="table table-responsive" id = "detailTable">';
@@ -808,7 +811,7 @@ function signedGroup (data) {
 		}
 } // signedGroup end
 
-/* ##### 작성한 글 ##### */
+/**** 작성글 ****/
 function wroteTitle(data) {
 	console.log(data);
 	doc += '<table class="table table-responsive" id = "detailTable">';
@@ -825,7 +828,7 @@ function wroteTitle(data) {
 		$(data.list).each(function(index, item){
 			doc += '	<tr>';
 			doc += '		<td>';			
-			doc += '			<a href = "javascript:board(' + item.postKey + ',' + item.groupKey + ')" title = "">' + item.postTitle + '</a>';
+			doc += '			<a href = "group_boarddetail.net?groupkey=' + item.groupKey + '&postkey=' + item.postKey + '&boardkey=' + item.boardKey + '&boardtype=' + item.boardtype + '" title = "">' + item.postTitle + '</a>';
 			doc += '		</td>';
 			doc += '		<td>';
 			doc += 				item.postReadcount;
@@ -835,7 +838,7 @@ function wroteTitle(data) {
 			doc += '		</td>';
 			doc += '	</tr>';
 		});	// each end
-		doc += '</tbody>';
+		doc += '	</tbody>';
 		doc += '</table>';
 		$('.col-lg-6>.forum-list').html(doc);
 		$('.pagination').html('');
@@ -874,7 +877,7 @@ function wroteTitle(data) {
 	}
 } // wroteTitle end
 
-/* ##### 작성한 댓글 ##### */
+/**** 작성댓글 ****/
 function wroteComment(data) {
 	console.log(data);
 	doc += '<table class="table table-responsive" id = "detailTable">';
@@ -893,12 +896,12 @@ function wroteComment(data) {
 			doc += '			<div class = "comment-info">';
 			doc += '				<div class = "comment-content">';
 			doc += '					<span>';
-			doc += '						<a href = "javascript:board(' + item.postKey + ',' + item.groupKey + ')" title = "">' + item.commentContent + '</a>';
+			doc += '						<a href = "group_boarddetail.net?groupkey=' + item.groupKey + '&postkey=' + item.postKey + '&boardkey=' + item.boardKey + '&boardtype=' + item.boardtype + '">' + item.commentContent + '</a>';
 			doc += '					</span>';
 			doc += '				</div>';
 			doc += '				<div class = "comment-subject">';
 			doc += '					<span>';
-			doc += '						<a href = "javascript:board(' + item.postKey + ',' + item.groupKey + ')" title = "">' + item.postTitle + '</a>';
+			doc += '						<a href = "group_boarddetail.net?groupkey=' + item.groupKey + '&postkey=' + item.postKey + '&boardkey=' + item.boardKey + '&boardtype=' + item.boardtype + '">' + item.postTitle + '</a>';
 			doc += '					</span>';
 			doc += '					<span class = "comment-num">';
 			doc += 						'[' + item.replyCount + ']';
@@ -952,7 +955,7 @@ function wroteComment(data) {
 	}
 } // wroteComment end
 
-/*** 회원이 가입 시 작성한 가입양식 ***/
+/**** 가입양식 ****/
 function getAnswer(data) {
 	console.log(data);
 	$('.pagination').html('');
@@ -1040,6 +1043,7 @@ $(function() {
 	});
 });
 </script>
+
 <script type="text/javascript">
 	//달력시작==================================================================
 

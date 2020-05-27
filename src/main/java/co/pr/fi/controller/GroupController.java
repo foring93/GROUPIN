@@ -74,7 +74,8 @@ public class GroupController {
 		List<GGroup> groups = groupservice.getGroupRank(0, limit, page);
 		return groups;
 	}
-
+	
+	// 모임 메인 페이지 
 	@GetMapping("/group_main.net")
 	public ModelAndView group_main(@RequestParam(value = "groupkey") int groupkey, @RequestParam(value = "upage", defaultValue = "1", required = false) int upage, ModelAndView mv,
 			HttpSession session) {
@@ -110,7 +111,7 @@ public class GroupController {
 		mv.addObject("ulistcount", ulistcount);
 		mv.addObject("userreggroup", uuserreggroup);
 		mv.addObject("ulimit", ulimit);
-		//
+		
 		mv.addObject("groupkey", groupkey);
 		mv.setViewName("group/groupin_group_main");
 		GGroupMember groupmember = groupservice.groupmember(userkey, groupkey);
@@ -1218,7 +1219,7 @@ public class GroupController {
 		return "redirect:groupin_group_board_transfer.net?groupkey=" + groupkey +"&boardkey="+ boardkey + "&boardtype="+boardtype;
 	}
 	
-	/* 게시글 상세보기 */
+	/**** 게시글 상세보기 ****/
 	@GetMapping("/group_boarddetail.net")
 	public ModelAndView group_boarddetail(@RequestParam(value = "groupkey") int groupkey,
 										  @RequestParam(value = "postkey") int postkey,
@@ -1263,7 +1264,6 @@ public class GroupController {
 			out.close();
 		}
 		
-
 		Map<String, Object> keys = new HashMap<String, Object>();
 		Post post = new Post();	// 게시글 관련
 		List<GComment> commentList = new ArrayList<GComment>();	// 댓글 관련
@@ -1290,9 +1290,9 @@ public class GroupController {
 			mv.addObject("isLiked", isLiked);		// 좋아요 여부 (1: 좋아요, 0: 좋아요 x)
 			mv.addObject("postkey", postkey);
 			mv.addObject("groupkey", groupkey);
-			mv.addObject("page", keys.get("page"));
-			mv.addObject("limit", keys.get("limit"));
-			mv.addObject("listcount", keys.get("listcount"));
+			mv.addObject("page", page);
+			mv.addObject("limit", limit);
+			mv.addObject("listcount", listcount);
 			mv.addObject("mem", mem);
 			mv.addObject("loginuser", loginuser);	// 현재 로그인한 유저 키값
 		}
@@ -1301,43 +1301,60 @@ public class GroupController {
 		int month = c.get(Calendar.MONTH) + 1;
 		int year = c.get(Calendar.YEAR);
 		int date = c.get(Calendar.DATE);
+		
 		mv.addObject("groupkey", groupkey);
 		mv.addObject("boardkey", boardkey);
 		mv.addObject("boardtype", boardtype);
 		mv.setViewName("group/groupin_group_boarddetail");
+		
 		GGroupMember groupmember = groupservice.groupmember(userkey, groupkey);
 		mv.addObject("userinfo", groupmember);
+		
 		GGroup group = groupservice.groupInfo(groupkey);
 		mv.addObject("group", group);
+		
 		String groupmaster = groupservice.groupmaster(groupkey);
 		mv.addObject("groupmaster", groupmaster);
+		
 		int groupmasterkey = groupservice.groupmasterkey(groupkey);
 		mv.addObject("groupmasterkey", groupmasterkey);
+		
 		GLocation location = groupservice.groupwhere(group.getWhereKey());
 		mv.addObject("groupswhere", location.getSWhere());
 		mv.addObject("groupdwhere", location.getDWhere());
+		
 		int age = groupservice.groupage(group.getAgeKey());
 		mv.addObject("groupage", age);
+		
 		String dcategory = groupservice.groupdcategory(groupkey);
 		mv.addObject("groupdcategory", dcategory);
+		
 		String scategory = groupservice.groupscategory(groupkey);
 		mv.addObject("groupscategory", scategory);
+		
 		int groupmembers = groupservice.groupmembers(groupkey);
 		mv.addObject("groupmembers", groupmembers);
+		
 		List<GGroupBoard> groupboardlist = groupservice.groupboardlist(groupkey);
 		mv.addObject("groupboardlist", groupboardlist);
+		
 		List<MemberList> groupmemberlist = groupservice.groupmemberlist(groupkey);
 		mv.addObject("groupmemberlist", groupmemberlist);
+		
 		//Post post = groupservice.detailpost(postkey,groupkey);
 		//mv.addObject("post", post);
+		
 		List<Post> groupmeetinglist = groupservice.groupmeetinglist(groupkey, userkey);
 		mv.addObject("groupmeetinglist", groupmeetinglist);
+		
 		List<CalendarList> groupcalendarlist = groupservice.groupcalendarlist(userkey, month, year);
 		mv.addObject("groupcalendarlist", groupcalendarlist);
 		mv.addObject("groupcalendarlistCount", groupcalendarlist.size());
+		
 		List<UserRegGroup> userreggroup = groupservice.userreggroup(userkey);
 		mv.addObject("userreggroup", userreggroup);
 		mv.addObject("userreggroupcount", userreggroup.size());
+		
 		for (int i = 0; i < groupcalendarlist.size(); i++) {
 			if (Integer.parseInt(groupcalendarlist.get(i).getStartdate()) == date) {
 				int d = Integer.parseInt(groupcalendarlist.get(i).getStartdate());

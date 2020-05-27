@@ -100,6 +100,7 @@ public class GroupBoardController {
 		return keys;
 	}
 	
+	/*
 	// 게시글 보기
 	@PostMapping("/detailBoard.net")
 	public String detailBoard ( @RequestParam(required = false, defaultValue = "0") int postkey, 
@@ -174,7 +175,8 @@ public class GroupBoardController {
 		m.addAttribute("죄송합니다. 게시글을 조회할 수 없습니다.", "error");
 		return "error";
 	}
-
+	*/
+	
 	/* 지도 맵 추가하기 예제입니다. */
 	@GetMapping("/DrawMap")
 	public String DrawMap() {

@@ -576,9 +576,8 @@
 	</select>
 
 	<!-- 현재 모임의 모임장 유저키 가져오기 -->
-	<select id="getMaster" parameterType="int" resultType="int">
-		SELECT
-		USERKEY
+	<select id = "getMaster" parameterType = "int" resultType = "int">
+		SELECT USERKEY
 		FROM GGROUP
 		WHERE GROUPKEY = #{groupkey}
 	</select>
