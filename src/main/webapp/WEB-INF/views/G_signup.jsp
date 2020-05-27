@@ -394,41 +394,48 @@ top:-9px;
 
 					var reg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\*]{2,10}$/;
 					var nick = $('#nickname').val();
-					if (reg.test(nick)) { // 정규표현식에 맞을 때 
-						console.log('### keyup 테스트 ### ' + nick);
-						$.ajax({
-							type : "POST",
-							url : "groupNickCheck",
-							data : {
-								nickname : nick,
-								groupkey : $('#checkGroupkey').val()
-							},
-							cache : false,
-							success : function(data) {
-								console.log('data = ' + data + ', isNaN(data) = ' + isNaN(data));
-								if (data == 1) {
-									$('.nick-status').css('color', 'red').text('이미 존재하는 닉네임입니다.');
-								} else {
-									$('.nick-status').css('color', 'blue').text('사용 가능한 닉네임입니다.');
-								}
-							},
-							error : function(request, status, error) {
-								console.log("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
-							}
-						}); // ajax end
+					
+					if (reg.test(nick)) { // 정규표현식에 맞을 때 중복 체크
+						checkNick(nick);
 					} else {
 						if ($(this).val().length == 1) {
 							$('.nick-status').css('color', 'lightgray').text('한글, 영어, 숫자로 2~10글자만 작성해주세요.');
-						} else if ($(this).val().length == 11) {
+						} else if ($(this).val().length > 10) {
 							var input = '';
-							input = $(this).val().substr(0,$(this).val().length - 1);
-							console.log('input = ' + input);
+							input = $(this).val().substr(0, 10);
+							console.log('글자 제한 초과');
 							$(this).val(input);
-							$('.nick-status').css('color', 'lightgray').text('한글, 영어, 숫자로 2~10글자만 작성해주세요.');
-						}
+							
+							if (reg.test(input)) {
+								checkNick(input);
+							}
+						} 
 					}
 				}); // keyup end
-
+		
+		function checkNick (data) {
+			$.ajax({
+				type : "POST",
+				url : "groupNickCheck",
+				data : {
+					nickname : data,
+					groupkey : $('#checkGroupkey').val()
+				},
+				cache : false,
+				success : function(data) {
+					console.log('data = ' + data + ' / 0 사용 가능 / 1 중복');
+					if (data == 1) {
+						$('.nick-status').css('color', 'red').text('이미 존재하는 닉네임입니다.');
+					} else {
+						$('.nick-status').css('color', 'blue').text('사용 가능한 닉네임입니다.');
+					}
+				},
+				error : function(request, status, error) {
+					console.log("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
+				}
+			}); // ajax end		
+		};	// function checkNick end
+				
 		$('#uploadfile').on('change', view);
 
 		function view(e) {
