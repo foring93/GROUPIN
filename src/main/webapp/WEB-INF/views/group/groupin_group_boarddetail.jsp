@@ -7,17 +7,24 @@
 <jsp:include page="../mainpage/header.jsp" />
 <!-- Header end -->
 
-<!-- 댓글 등록 아이콘 -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-<!-- 자물쇠 아이콘 -->
-<link rel="stylesheet" 	href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-						integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-						crossorigin="anonymous">
 <!-- 제이쿼리 라이브러리 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <style>
 /*고연희 스타일*/
+
+.sbmbtn {
+	bottom : 5px !important;
+}
+
+.fa-trash-alt {
+	color : #ff3a3ad4;
+}
+
+.fa-eraser {
+	color : #9a9a9a;
+}
+
 .central-meta.item .like {
 	color : black;
 }
@@ -28,7 +35,7 @@
 	width: 100%
 }
 
-b {
+.friend-name b {
 	color: #c58d78
 }
 
@@ -107,7 +114,13 @@ textarea:hover {
 	margin-left: 5px;
 	margin-right: 3px;
 }
-/*고연희 스타일*/
+
+.coment-head + p {
+	margin-left : 6px;
+}
+/* 고연희 스타일 */
+
+
 .forgroupname {
 	list-style: none;
 	padding-top: 20px;
@@ -584,50 +597,14 @@ cursor: pointer;
 									<div class = "coment-area">
 										<c:set var = "before" value = "0"/>
 										<ul class = "we-comet">
-											<c:forEach var = "c" items = "${comment}">
-												<!-- 원댓인 경우 -->
-												<c:if test="${c.commemtReRef != before && before > 0}">
-													</li>
-												</c:if>
-												
-												<c:if test="${c.commemtReRef != before}">
-													<li>
-														<div class="comet-avatar">
-															<!-- 회원 프사 없을 경우 -->
-															<c:if test="${c.profileFile == null}">
-																<img src="resources/images/default.png" class="group-img" alt="" />
-															</c:if>
-															<!-- 회원 프사 있을 경우 -->
-															<c:if test="${c.profileFile != null}">
-																<img src="<spring:url value='/image${c.profileFile}'/>" class="group-img" alt="" />
-															</c:if>
-														</div>
-														<div class="we-comment">
-															<div class="coment-head">
-																<h5>
-																	<a href="javascript:memDetail(${groupkey},${c.userKey})" title="">${c.groupNickname}</a>
-																</h5>
-																<span>${c.commentDate}</span> 
-																<a class="we-reply" href="javascript:commentReply(${c.commnetNum})" title = "Reply"> 
-																	<i class="fa fa-reply"></i>
-																</a>
-																<!-- 댓쓴 본인이어야만 수정/삭제 보이게 -->
-																<c:if test = "${loginuser == c.userKey}">
-																	<a class="update" href="javascript:updateReply(${c.commnetNum})" title = "Update"> 
-																		<i class="fas fa-eraser"></i>
-																	</a>
-																	<a class="delete" href="javascript:deleteReply(${c.commnetNum})" title = "Delete"> 
-																		<i class="far fa-trash-alt"></i>
-																	</a>
-																</c:if>
-															</div>
-															<p>${c.commentContent}</p>
-														</div> 
-												</c:if>
-														
-												<!-- 대댓인 경우 -->
-												<c:if test="${c.commemtReRef == before}">
-													<ul>
+											<c:if test = "${listcount != 0}">
+												<c:forEach var = "c" items = "${comment}">
+													<!-- 원댓인 경우 -->
+													<c:if test="${c.commemtReRef != before && before > 0}">
+														</li>
+													</c:if>
+													
+													<c:if test="${c.commemtReRef != before}">
 														<li>
 															<div class="comet-avatar">
 																<!-- 회원 프사 없을 경우 -->
@@ -645,23 +622,66 @@ cursor: pointer;
 																		<a href="javascript:memDetail(${groupkey},${c.userKey})" title="">${c.groupNickname}</a>
 																	</h5>
 																	<span>${c.commentDate}</span> 
+																	<a class="we-reply" href="javascript:commentReply(${c.commnetNum})" title = "Reply"> 
+																		<i class="fa fa-reply"></i>
+																	</a>
 																	<!-- 댓쓴 본인이어야만 수정/삭제 보이게 -->
-																	<c:if test="${loginuser == c.userKey}">
-																		<a class="update" href="javascript:updateReply(${c.commnetNum})" title="Update"> 
+																	<c:if test = "${loginuser == c.userKey}">
+																		<a class="update" href="javascript:updateReply(${c.commnetNum})" title = "Update"> 
 																			<i class="fas fa-eraser"></i>
 																		</a>
-																		<a class="delete" href="javascript:deleteReply(${c.commnetNum})" title="Delete"> 
+																		<a class="delete" href="javascript:deleteReply(${c.commnetNum})" title = "Delete"> 
 																			<i class="far fa-trash-alt"></i>
 																		</a>
 																	</c:if>
 																</div>
 																<p>${c.commentContent}</p>
-															</div>
-														</li>
-													</ul>
-											    </c:if>
-												<c:set var = "before" value = "${c.commemtReRef}"/>
-											</c:forEach>
+															</div> 
+													</c:if>
+															
+													<!-- 대댓인 경우 -->
+													<c:if test="${c.commemtReRef == before}">
+														<ul>
+															<li>
+																<div class="comet-avatar">
+																	<!-- 회원 프사 없을 경우 -->
+																	<c:if test="${c.profileFile == null}">
+																		<img src="resources/images/default.png" class="group-img" alt="" />
+																	</c:if>
+																	<!-- 회원 프사 있을 경우 -->
+																	<c:if test="${c.profileFile != null}">
+																		<img src="<spring:url value='/image${c.profileFile}'/>" class="group-img" alt="" />
+																	</c:if>
+																</div>
+																<div class="we-comment">
+																	<div class="coment-head">
+																		<h5>
+																			<a href="javascript:memDetail(${groupkey},${c.userKey})" title="">${c.groupNickname}</a>
+																		</h5>
+																		<span>${c.commentDate}</span> 
+																		<!-- 댓쓴 본인이어야만 수정/삭제 보이게 -->
+																		<c:if test="${loginuser == c.userKey}">
+																			<a class="update" href="javascript:updateReply(${c.commnetNum})" title="Update"> 
+																				<i class="fas fa-eraser"></i>
+																			</a>
+																			<a class="delete" href="javascript:deleteReply(${c.commnetNum})" title="Delete"> 
+																				<i class="far fa-trash-alt"></i>
+																			</a>
+																		</c:if>
+																	</div>
+																	<p>${c.commentContent}</p>
+																</div>
+															</li>
+														</ul>
+												    </c:if>
+													<c:set var = "before" value = "${c.commemtReRef}"/>
+												</c:forEach>
+											</c:if>
+											<c:if test = "${listcount == 0}">
+												<li>
+													<div style = "text-align : center">등록된 댓글이 없습니다.</div>
+												</li>
+											</c:if>
 											<!-- 댓글 -->
 
 											<!-- 댓글 입력창 -->
@@ -692,7 +712,7 @@ cursor: pointer;
 														<button type="button" class="secretbtn">
 															<i class="fas fa-unlock" aria-hidden="true"></i>
 														</button>
-														<button type="submit" class="glyphicon glyphicon-send"></button>
+														<button type = "submit" class = "sbmbtn"><i class="fas fa-paper-plane"></i></button>
 													</form>
 												</div>
 											</li>
@@ -734,7 +754,7 @@ function commentReply(commentNo) {
 	console.log('답댓 달 댓글의 번호 = ' + commentNo);
 }; // reply end
 
-/**** 댓글 수정 ****/
+/**** 수정할 댓글내용 가져오기 ****/
 function updateReply(commentNo) {
 	$('.post-comt-box textarea').css('background', '#088dcd1a').focus();
 	$('input[name=commentType]').val(2); // 수정 : 2
@@ -832,7 +852,6 @@ function deleteReply(commentNo) {
 							doc += '			<div class="coment-head">';
 							doc += '				<h5><a href="javascript:memDetail(' + item.groupKey + ',' + item.userKey + ')" title="">' + item.groupNickname + '</a></h5>';
 							doc += '				<span>' + item.commentDate + '</span>';
-							doc += '				<a class="we-reply" href="javascript:commentReply(' + item.commnetNum + ')" title="Reply"><i class="fa fa-reply"></i></a>';
 							
 							/* 댓쓴이어야 수정/삭제 보이게 */
 							if (data.loginuser == item.userKey) {
@@ -874,7 +893,7 @@ function deleteReply(commentNo) {
 				/* 댓글 입력창 */
 				doc += '			<textarea placeholder="Post your comment"></textarea>';
 				doc += '			<button type = "button" class = "secretbtn"><i class="fas fa-unlock" aria-hidden="true"></i></button>';
-				doc += '			<button type = "submit" class = "glyphicon glyphicon-send"></button>';
+				doc += '			<button type = "submit" class = "sbmbtn"><i class="fas fa-paper-plane"></i></button>';
 				doc += '		</form>';
 				doc += '	</div>';
 				doc += '</li>';
@@ -1087,7 +1106,7 @@ $(function() {
 				/* 댓글 입력창 */
 				doc += '			<textarea placeholder="Post your comment"></textarea>';
 				doc += '			<button type = "button" class = "secretbtn"><i class="fas fa-unlock" aria-hidden="true"></i></button>';
-				doc += '			<button type = "submit" class = "glyphicon glyphicon-send"></button>';
+				doc += '			<button type = "submit" class = "sbmbtn"><i class="fas fa-paper-plane"></i></button>';
 				doc += '		</form>';
 				doc += '	</div>';
 				doc += '</li>';
@@ -1103,15 +1122,6 @@ $(function() {
 }); // ready end
 </script>
 <script>
-function memDetail(groupKey, userKey) {
-	var f = document.memDetail; 		// 폼 name
-	f.groupkey.value = groupKey; 		// input 태그 중 name이 groupKey인 값에 대해서 groupkey를 넘긴다.
-	f.userkey.value = userKey; 			// input 태그 중 name이 userKey인 값에 대해서 userkey를 넘긴다.
-	f.action = "G_mem_detail.net"; 		// 이동할 페이지
-	f.method = "post"; 					// POST 방식으로 데이터 전송
-	f.submit(); 
-};
-
 $(function() {
 	/* 비밀댓글, 댓글 등록 버튼과 겹치지 않게 하기 위한 textarea 라인 당 글자수 제한 */
 	$('textarea').keyup(function() {
@@ -1186,10 +1196,10 @@ $(function() {
 }) // ready end
 
 /**** 회원 상세보기 ****/
-function memDetail(userkey, groupkey) {
+function memDetail(groupkey, userkey) {
 	var f = document.memDetail; // 폼 name
-	f.userkey.value = userkey; // input 태그 중 name이 groupkey인 값에 대해서 userkey를 넘긴다.
 	f.groupkey.value = groupkey; // input 태그 중 name이 groupkey인 값에 대해서 groupkey를 넘긴다.
+	f.userkey.value = userkey; // input 태그 중 name이 groupkey인 값에 대해서 userkey를 넘긴다.
 	f.action = "G_mem_detail.net"; // 이동할 페이지
 	f.method = "post"; // POST 방식으로 데이터 전송
 	f.submit();

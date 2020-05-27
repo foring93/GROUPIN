@@ -98,13 +98,19 @@
 	<select id = "wroteInGroup" resultType = "post" parameterType = "map">
 	<![CDATA[	
 		SELECT * FROM (	SELECT ROWNUM R, P.*
-						FROM (	SELECT POSTKEY, GROUPKEY, POSTTITLE, POSTREADCOUNT, TO_CHAR(POSTDATE, 'YYYY-MM-DD') AS POSTDATE
-								FROM POST
-								WHERE USERKEY = #{userkey} AND GROUPKEY = #{groupkey}
+						FROM (	SELECT BOARDKEY, BOARDNAME, BOARDTYPE, POSTKEY, GROUPKEY, POSTTITLE, POSTREADCOUNT, POSTDATE
+								FROM (SELECT BOARDKEY, BOARDNAME, BOARDTYPE 
+									  FROM GGROUPBOARD) 
+	 							JOIN 
+	 								 (SELECT BOARDKEY, POSTKEY, GROUPKEY, POSTTITLE, POSTREADCOUNT, TO_CHAR(POSTDATE, 'YYYY-MM-DD') AS POSTDATE 
+	 								  FROM POST
+	 								  WHERE USERKEY = #{userkey} AND GROUPKEY = #{groupkey}
+	  								 )
+								USING (BOARDKEY)
 								ORDER BY POSTDATE DESC) P
 					  )
+		WHERE R >= #{START} AND R <= #{END}			  
 	]]>
-<!-- 		WHERE R >= #{START} AND R <= #{END}	 -->
 	</select>
 	
 	<!-- 유저가 작성한 글의 개수 -->
@@ -118,20 +124,22 @@
 	<!-- 유저가 댓글 단 글 -->
 	<select id = "postByCommented" resultType = "post" parameterType = "map">
 		SELECT * FROM (	SELECT ROWNUM R, C.*
-						FROM (	SELECT USERKEY, POSTKEY, COMMENTCONTENT, GROUPKEY, REPLYCOUNT, POSTTITLE, TO_CHAR(COMMENTDATE, 'YYYY-MM-DD') COMMENTDATE, POSTREADCOUNT, COMMENTSHOW 
-								FROM GCOMMENT LEFT JOIN (SELECT POSTKEY, POSTTITLE, REPLYCOUNT, POSTREADCOUNT
-														 FROM POST LEFT JOIN (SELECT POSTKEY, COUNT(POSTKEY) REPLYCOUNT
-													 						  FROM GCOMMENT
-													 						  GROUP BY POSTKEY)
-													 	 USING (POSTKEY)) 
+						FROM (	SELECT BOARDKEY, BOARDTYPE, USERKEY, POSTKEY, COMMENTCONTENT, GROUPKEY, REPLYCOUNT, POSTTITLE, TO_CHAR(COMMENTDATE, 'YYYY-MM-DD') COMMENTDATE, POSTREADCOUNT, COMMENTSHOW 
+								FROM GCOMMENT LEFT JOIN (SELECT BOARDKEY, BOARDTYPE, POSTKEY, POSTTITLE, REPLYCOUNT, POSTREADCOUNT
+						 								 FROM GGROUPBOARD JOIN (SELECT BOARDKEY, POSTKEY, POSTTITLE, REPLYCOUNT, POSTREADCOUNT
+																	 			FROM POST LEFT JOIN (SELECT POSTKEY, COUNT(POSTKEY) REPLYCOUNT
+													 						  						FROM GCOMMENT
+													 						  						GROUP BY POSTKEY)
+													 	 						USING (POSTKEY)) 
+														 USING (BOARDKEY))
 								USING(POSTKEY)					 						  
-								WHERE USERKEY = #{userkey} AND GROUPKEY = #{groupkey}
-								<if test = "loginuser != userkey">
-									AND COMMENTSHOW &lt;&gt; 1
-								</if>
-								ORDER BY COMMENTDATE DESC) C
+						WHERE USERKEY = #{userkey} AND GROUPKEY = #{groupkey}
+						<if test = "loginuser != userkey">
+							AND COMMENTSHOW &lt;&gt; 1
+						</if>
+						ORDER BY COMMENTDATE DESC) C
 					)
-		<!-- <![CDATA[WHERE R >= #{START} AND R <= #{END}]]> -->
+		<![CDATA[WHERE R >= #{START} AND R <= #{END}]]>
 	</select>
 	
 	<!-- 좋아요 여부 -->
