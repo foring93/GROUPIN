@@ -477,6 +477,7 @@ top:-9px;
 		}
 		; // view end
 		
+		// 가입 전 닉네임 유효성 검사 이중체크 
 		$('form').submit(function(){
 			if (!checkDone) {
 				alert('닉네임을 바르게 입력해주세요.');
