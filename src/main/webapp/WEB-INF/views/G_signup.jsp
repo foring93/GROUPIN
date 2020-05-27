@@ -388,27 +388,38 @@ top:-9px;
 </style>
 <script>
 	$(function() {
+		var checkDone = false;	// 가입 신청 시 닉네임 유효성 검사를 마쳤을 경우에만 가입으로 넘어가게 하는 변수 
+		
 		$('#nickname').keyup(function() {
 					// 형식에 맞든 안 맞든 첫 메시지가 계속 뜨기 때문에 keyup 이벤트 발생할 때마다 메시지 비운다.
 					$('.nick-status').empty();
 
 					var reg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\*]{2,10}$/;
-					var nick = $('#nickname').val();
+					var dont = /[~!@#$%^&*()_+|<>?:{}]/;	// 특수기호
 					
-					if (reg.test(nick)) { // 정규표현식에 맞을 때 중복 체크
+					var nick = $('#nickname').val();
+
+					if (reg.test(nick) && !(dont.test(nick))) { // 정규표현식에 맞을 때 중복 체크
 						checkNick(nick);
 					} else {
-						if ($(this).val().length == 1) {
+						if ($(this).val().length <= 1) {
 							$('.nick-status').css('color', 'lightgray').text('한글, 영어, 숫자로 2~10글자만 작성해주세요.');
+							checkDone = false;
 						} else if ($(this).val().length > 10) {
 							var input = '';
 							input = $(this).val().substr(0, 10);
 							console.log('글자 제한 초과');
 							$(this).val(input);
 							
-							if (reg.test(input)) {
+							if (reg.test(input) && !(dont.test(input))) {
 								checkNick(input);
+							} else {
+								$('.nick-status').css('color', 'lightgray').text('한글, 영어, 숫자로 2~10글자만 작성해주세요.');
+								checkDone = false;
 							}
+						} else {
+							$('.nick-status').css('color', 'lightgray').text('한글, 영어, 숫자로 2~10글자만 작성해주세요.');
+							checkDone = false;
 						} 
 					}
 				}); // keyup end
@@ -426,8 +437,10 @@ top:-9px;
 					console.log('data = ' + data + ' / 0 사용 가능 / 1 중복');
 					if (data == 1) {
 						$('.nick-status').css('color', 'red').text('이미 존재하는 닉네임입니다.');
+						checkDone = false;
 					} else {
 						$('.nick-status').css('color', 'blue').text('사용 가능한 닉네임입니다.');
+						checkDone = true;
 					}
 				},
 				error : function(request, status, error) {
@@ -463,6 +476,15 @@ top:-9px;
 			} // reader.onload end
 		}
 		; // view end
+		
+		// 가입 전 닉네임 유효성 검사 이중체크 
+		$('form').submit(function(){
+			if (!checkDone) {
+				alert('닉네임을 바르게 입력해주세요.');
+				$('#nickname').focus();
+				return false;
+			}
+		});
 	}); // function end
 </script>
 <!-- 그룹 페이지 상단 -->
