@@ -267,11 +267,21 @@ public class GroupMemberController {
 		
 		if (session.getAttribute("id") != null) {
 			loginuser = groupMemberService.getUser((String) session.getAttribute("id"));
-			mv.addObject("loginuser", loginuser);
 		}
 		
 		int masterkey = groupMemberService.getMaster(groupkey);	// 현재 모임에서의 모임장 유저키를 가져온다.
-		mv.addObject("masterkey", masterkey);
+		
+		boolean result = false;
+		
+		// 현재 로그인한 회원이 조회하려는 회원일 경우 or 로그인한 회원이 모임장일 경우
+		if ((loginuser == userkey) || (loginuser == masterkey)) {
+			result = true;
+			if (userkey == masterkey) {
+				result = false;
+			}
+		}
+		
+		mv.addObject("result", result);
 		
 		int listcount = 0;
 		

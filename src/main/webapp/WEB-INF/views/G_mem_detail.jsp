@@ -501,7 +501,7 @@ top:-9px;
 									<li class = "selected-menu"><a href="/"><i class="fas fa-users"></i>가입한 모임</a></li>
 									<li><a href="/"><i class="fas fa-user-edit"></i>작성한 글</a></li>
 									<li><a href="/"><i class="fas fa-comments"></i>작성한 댓글</a></li>
-									<c:if test = "${loginuser == userkey || loginuser == masterkey}">
+									<c:if test = "${result}">
 										<li><a href="/"><i class="far fa-address-card"></i>작성한 가입양식</a></li>
 									</c:if>
 								</ul>
