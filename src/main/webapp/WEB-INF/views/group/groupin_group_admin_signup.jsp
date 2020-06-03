@@ -433,40 +433,40 @@ top:-9px;
 										<!-- 기본적으로 있을 가입양식 - 자기소개 -->
 										<div class="form-group">
 											<input type = "text" required = "required" name = "introduce"/>
-											<label class="control-label" for="input">자기소개를 입력해주세요.</label><i class="mtrl-select"></i>
+											<label class="control-label" for="input">${introduce}</label><i class="mtrl-select"></i>
 										</div>
 										
 										<c:if test="${quest1 ne null}">
 											<div class="form-group">
-												<input type="text" id="answer1" name="answer1" required="required" /> 
+												<input type="text" id="quest1" name="quest1" required="required" /> 
 												<label class="control-label" for="answer1">${quest1}</label><i class="mtrl-select"></i>
 											</div>
 											<button class = "removeBtn">삭제</button>
 										</c:if>
 										<c:if test="${quest2 ne null}">
 											<div class="form-group">
-												<input type="text" id="answer2" name="answer2" required="required" />
+												<input type="text" id="quest2" name="quest2" required="required" />
 												<label class="control-label" for="answer2">${quest2}</label><i class="mtrl-select"></i>
 											</div>
 											<button class = "removeBtn">삭제</button>
 										</c:if>
 										<c:if test="${quest3 ne null}">
 											<div class="form-group">
-												<input type="text" id="answer3" name="answer3" required="required" /> 
+												<input type="text" id="quest3" name="quest3" required="required" /> 
 													<label class="control-label" for="answer3">${quest3}</label><i class="mtrl-select"></i>
 											</div>
 											<button class = "removeBtn">삭제</button>
 										</c:if>
 										<c:if test="${quest4 ne null}">
 											<div class="form-group">
-												<input type="text" id="answer4" name="answer4" required="required" /> 
+												<input type="text" id="quest4" name="quest4" required="required" /> 
 												<label class="control-label" for="answer4">${quest4}</label><i class="mtrl-select"></i>
 											</div>
 											<button class = "removeBtn">삭제</button>
 										</c:if>
 										<c:if test="${quest5 ne null}">
 											<div class="form-group">
-												<input type="text" id="answer5" name="answer5" required="required" /> 
+												<input type="text" id="quest5" name="quest5" required="required" /> 
 												<label class="control-label" for="answer5">${quest5}</label><i class="mtrl-select"></i>
 											</div>
 											<button class = "removeBtn">삭제</button>

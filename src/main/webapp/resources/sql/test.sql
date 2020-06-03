@@ -135,7 +135,7 @@ ALTER TABLE gcategory2
 
 
 
-
+select * from gusers
 
 
 -- glocation Table Create SQL
@@ -1760,7 +1760,11 @@ SELECT * FROM JOINANSWER;
 
 DELETE JOINANSWER WHERE USERKEY = 41;
 
+SELECT * FROM JOINQUEST WHERE GROUPKEY = 0;
 
+SELECT * FROM JOINANSWER;
 
+select * from ggroupmember where groupkey = 0;
 
+delete from JOINANSWER where userkey = 62
 

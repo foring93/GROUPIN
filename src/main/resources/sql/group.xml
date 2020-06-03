@@ -10,16 +10,12 @@
 	</select>
 
 
-	<select id="regornot" resultType="int"
-		parameterType="java.util.Map">
-		select count(*) from ggroupmember where
-		groupkey=#{groupkey} and
-		userkey=#{userkey}
+	<select id="regornot" resultType = "int" parameterType = "java.util.Map">
+		select count(*) from ggroupmember 
+		where groupkey = #{groupkey} and userkey = #{userkey}
 	</select>
 
-
 	<select id="getGroupRank" parameterType="map" resultType="group">
-
 		select * from
 		<if test="type == 0"> 
 		<![CDATA[
@@ -49,14 +45,12 @@
 	<!-- 회원의 가입한 모임 수 -->
 	<select id="getJoinedCount" resultType="int" parameterType="int">
 		SELECT COUNT(*)
-		FROM GGROUP NATURAL JOIN ( SELECT GROUPKEY,
-		COUNT(GROUPKEY) AS MEMBERCOUNT
-		FROM GGROUPMEMBER
-		GROUP BY GROUPKEY
-		HAVING GROUPKEY IN (SELECT GROUPKEY
-		FROM GGROUPMEMBER
-		WHERE USERKEY =
-		#{USERKEY}))
+		FROM GGROUP NATURAL JOIN ( SELECT GROUPKEY, COUNT(GROUPKEY) AS MEMBERCOUNT
+								   FROM GGROUPMEMBER
+								   GROUP BY GROUPKEY
+								   HAVING GROUPKEY IN (SELECT GROUPKEY
+													   FROM GGROUPMEMBER
+													   WHERE USERKEY = #{USERKEY}))
 	</select>
 
 	<!-- 가입 전 이미 가입한 회원인지 판단 -->
@@ -558,18 +552,28 @@
 		jdbcType = VARCHAR},
 		#{quest.quest3, jdbcType = VARCHAR},
 		#{quest.quest4, jdbcType = VARCHAR},
-		#{quest.quest5, jdbcType =
-		VARCHAR},
+		#{quest.quest5, jdbcType = VARCHAR},
 		#{quest.introduce})
 	</insert>
+	
+	<!-- ########################################################################### -->
 	<!-- 가입양식 수정 -->
-	<!-- <update id = "updateSignupSample" parameterType = "map"> UPDATE JOINQUEST 
-		<set> <if test = "quest1 != null"></if> </set> WHERE GROUPKEY = #{groupkey} 
-		</update> -->
+	<update id = "updateSignupSample" parameterType = "map"> 
+		UPDATE JOINQUEST 
+		<set> 
+			<if test = "quest.introduce != null">introduce = #{quest.introduce},</if>
+			<if test = "quest.quest1 != null">QUEST1 = #{quest.quest1},</if> 
+			<if test = "quest.quest2 != null">QUEST2 = #{quest.quest2},</if> 
+			<if test = "quest.quest3 != null">QUEST3 = #{quest.quest3},</if> 
+			<if test = "quest.quest4 != null">QUEST4 = #{quest.quest4},</if> 
+			<if test = "quest.quest5 != null">QUEST5 = #{quest.quest5}</if> 
+		</set> 
+		WHERE GROUPKEY = #{groupkey} 
+	</update>
+	<!-- ########################################################################### -->
 
 	<!-- 가입양식 가져오기 -->
-	<select id="getQuestList" parameterType="int"
-		resultType="joinQuest">
+	<select id="getQuestList" parameterType = "int" resultType = "joinQuest">
 		SELECT *
 		FROM JOINQUEST
 		WHERE GROUPKEY = #{groupkey}
@@ -610,5 +614,10 @@
 		using(groupkey) where a.userkey=#{userkey} order by groupname desc) A)
 		where rnum&gt;=#{start} AND rnum&lt;=#{end}
 	</select>
-
+	
+	
+	<delete id = "deleteAnswer" parameterType = "map">
+		DELETE FROM JOINANSWER
+		WHERE USERKEY = #{userkey} AND GROUPKEY = #{groupkey}
+	</delete>
 </mapper>

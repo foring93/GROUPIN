@@ -133,5 +133,5 @@ public interface GroupService {
 
 	public List<UserRegGroup> userreggroupl(int page, int limit, int userkey);
 
-
+	public void deleteAnswer(Map<String, Object> map);
 }

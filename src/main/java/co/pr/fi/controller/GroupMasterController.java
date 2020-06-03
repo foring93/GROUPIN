@@ -390,6 +390,7 @@ public class GroupMasterController {
 		map.put("groupkey", groupKey);
 		
 		int result = groupMasterService.expelMem(map);
+		
 		if (result == 0) {
 			result = -1;
 		}
@@ -454,6 +455,7 @@ public class GroupMasterController {
 		keys.put("groupkey", groupkey);
 		
 		int result = groupMasterService.rejectJoin(keys);
+		groupservice.deleteAnswer(keys);
 		
 		// 요청 거절 완료 
 		if (result == 1)
