@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
 <mapper namespace="Admin">
-
-
 	<!-- 그룹 정보  -->
 	<select id="getGroup" parameterType="int" resultType="group">
 	select * from ggroup where groupkey = #{key}
@@ -24,60 +23,57 @@
 	delete from delete_File
 	</delete>
 	
+	<!-- 정지 회원 중에서 풀 회원 있는지 조회 -->	
+	<update id="stopCancelUsers">
+	update gusers set userstatuscode = null, userstatus = 0 
+	where userstatus = 3 and ROUND((sysdate-userstatuscode)*24*60) > 30
+	</update>
+
+	<!-- 신고 정보 지우기 -->
+	<delete id="deletePolice" parameterType="int">
+	delete from userpolice where reciveuserKey = #{userkey}
+	</delete>
 	
-<!-- 정지 회원 중에서 풀 회원 있는지 조회 -->	
-<update id="stopCancelUsers">
-update gusers set userstatuscode = null, userstatus = 0 
-where userstatus = 3 and ROUND((sysdate-userstatuscode)*24*60) > 30
-</update>
+	
+	<!-- 신고 정보 목록 -->
+	<select id="policeMDetail" parameterType="int" resultType="policeDetail">
+	  select distinct policeboardsort,policenumber,commentcontent postcontent
+	   from userpolice, gcomment 
+	   where reciveuserKey = #{userkey} and policeboardsort = 'M' 
+	   and reciveuserKey = gcomment.userkey 
+	   and commnetnum in (policenumber)
+	</select>
+	
+	<!-- 신고 세부 목록 -->
+	<select id="policeBDetail" parameterType="int" resultType="policeDetail">
+	  select distinct policeboardsort, policenumber,postcontent 
+	  from userpolice,post 
+	  where reciveuserKey = #{userkey} and policeboardsort = 'B' 
+	  and reciveuserKey = post.userkey and postkey in (policenumber)
+	</select>
 
-<!-- 신고 정보 지우기 -->
-<delete id="deletePolice" parameterType="int">
-delete from userpolice where reciveuserKey  = #{userkey}
-</delete>
+	<!-- 유저 상태 수정 -->
+	<update id="setUserStatus" parameterType="map">
+	update gusers set userstatus = #{status} where userid = #{id}
+	</update>
+	
+	<!-- 유저 상태가 수정된 날짜 -->
+	<update id="setUserStatusDate">
+	update gusers set userstatuscode = sysdate where userid = #{id}
+	</update>
+	
+	
+	<!-- 모임 삭제 -->
+	<delete id="negativeGroup">
+	delete from ggroup where groupKey = #{groupKey}
+	</delete>
+	
+	<!-- 모임 승인 -->
+	<update id="acceptGroup" parameterType="int">
+		update ggroup set groupstatus = 0 where groupKey = #{groupKey}
+	</update>
 
-
-<!-- 신고 정보 목록 -->
-<select id="policeMDetail" parameterType="int" resultType="policeDetail">
-  select distinct policeboardsort,policenumber,commentcontent postcontent
-   from userpolice, gcomment 
-   where reciveuserKey = #{userkey} and policeboardsort = 'M' 
-   and reciveuserKey = gcomment.userkey 
-   and commnetnum in (policenumber)
-    
-</select>
-
-<!-- 신고 세부 목록 -->
-<select id="policeBDetail" parameterType="int" resultType="policeDetail">
-  select distinct policeboardsort, policenumber,postcontent 
-  from userpolice,post 
-  where reciveuserKey = #{userkey} and policeboardsort = 'B' 
-  and reciveuserKey = post.userkey and postkey in (policenumber)
-</select>
-
-<!-- 유저 상태 수정 -->
-<update id="setUserStatus" parameterType="map">
-update gusers set userstatus = #{status} where userid = #{id}
-</update>
-
-<!-- 유저 상태가 수정된 날짜 -->
-<update id="setUserStatusDate">
-update gusers set userstatuscode = sysdate where userid = #{id}
-</update>
-
-
-<!-- 모임 삭제 -->
-<delete id="negativeGroup">
-delete from ggroup where groupKey = #{groupKey}
-</delete>
-
-<!-- 모임 승인 -->
-<update id="acceptGroup" parameterType="int">
-	update ggroup set groupstatus = 0 where groupKey = #{groupKey}
-</update>
-
-	<select id="getAllGroupList" parameterType="group"
-		resultType="group">
+	<select id="getAllGroupList" parameterType="group" resultType="group">
 	   <![CDATA[ 
 	 SELECT * FROM (
 				SELECT b.*,
@@ -109,8 +105,7 @@ delete from ggroup where groupKey = #{groupKey}
 	]]>
 	</select>
 
-	<select id="getGroupListCount" parameterType="int"
-		resultType="int">
+	<select id="getGroupListCount" parameterType="int" resultType="int">
 		select count(*) from ggroup where groupstatus = #{type}
 	</select>
 
@@ -125,8 +120,7 @@ delete from ggroup where groupKey = #{groupKey}
 
 	</delete>
 
-	<select id="getNotice" parameterType="map"
-		resultType="usermessage">
+	<select id="getNotice" parameterType="map" resultType="usermessage">
 		  <![CDATA[ 
 			  SELECT * FROM (
 				SELECT b.*, rownum rnum
@@ -144,32 +138,26 @@ delete from ggroup where groupKey = #{groupKey}
 
 
 	<select id="AdminPolice" resultType="policeResult">
-		SELECT reciveuserkey
-		userkey, (select userid from gusers where reciveuserkey
-		= userkey)
-		userid,count(*) count FROM USERPOLICE GROUP BY
-		reciveuserkey order by
-		count(*) desc
+		SELECT reciveuserkey userkey, (select userid from gusers where reciveuserkey = userkey) userid, count(*) count 
+		FROM USERPOLICE 
+		GROUP BY reciveuserkey 
+		order by count(*) desc
 	</select>
 
-	<select id="AdminSearchUser" parameterType="String"
-		resultType="member">
-		select * from gusers where userid like '%' || #{keyword} ||
-		'%' and userkey > 0
-	</select>
-
-
-	<select id="admindeleteUser" parameterType="String"
-		resultType="int">
-		update gusers set USERSTATUS = 2, USERSTATUSCODE = sysdate
-		where userid =
-		#{id}
+	<select id="AdminSearchUser" parameterType="String" resultType="member">
+		select * 
+		from gusers 
+		where userid like '%' || #{keyword} || '%' and userkey > 0
 	</select>
 
 
+	<select id="admindeleteUser" parameterType="String" resultType="int">
+		update gusers 
+		set USERSTATUS = 2, USERSTATUSCODE = sysdate
+		where userid = #{id}
+	</select>
 
-	<select id="getAllUserList" parameterType="Map"
-		resultType="member">
+	<select id="getAllUserList" parameterType="Map" resultType="member">
 	  <![CDATA[ 
 	  SELECT * FROM (
 				SELECT b.*, rownum rnum
@@ -206,8 +194,7 @@ delete from ggroup where groupKey = #{groupKey}
 		
 	</select>
 
-	<select id="getStatisticsLocation"
-		resultType="statisticsLocation">
+	<select id="getStatisticsLocation" resultType="statisticsLocation">
 		select swhere location, count(userlocation) value from
 		glocation,gusers
 		where
@@ -222,8 +209,7 @@ delete from ggroup where groupKey = #{groupKey}
 	</select>
 
 
-	<select id="getStatisticsJoinDate"
-		resultType="statisticsJoinDate">
+	<select id="getStatisticsJoinDate" resultType="statisticsJoinDate">
 	  <![CDATA[ 
 	  select rownum, joindate, value from (SELECT to_char(userjoindate,'mm-dd') joindate,
 	count(*) value FROM GUSERS group by to_char(userjoindate,'mm-dd') 
@@ -232,8 +218,7 @@ delete from ggroup where groupKey = #{groupKey}
 	]]>
 	</select>
 
-	<select id="getStatisticsCategory"
-		resultType="statisticsCategory">
+	<select id="getStatisticsCategory" resultType="statisticsCategory">
 	 <![CDATA[ 
 	select category, value from (select scategoryname category, count(scategoryname) 
 	value from gcategory2,ggroup where CATEGORYKEY = SCATEGORYKEY 
@@ -244,16 +229,13 @@ delete from ggroup where groupKey = #{groupKey}
 	
 	<select id="statisticsUCategory" resultType="statisticsCategory">
 	 <![CDATA[ 
-	select category, value from (select scategoryname category, count(scategoryname) 
-	value from gcategory2,gusercategory where CATEGORYKEY = SCATEGORYKEY 
-	group by scategoryname order by count(scategoryname) desc) 
-	where rownum <10
+	select category, value 
+	from (select scategoryname category, count(scategoryname) value 
+		 from gcategory2, gusercategory 
+		 where CATEGORYKEY = SCATEGORYKEY 
+		 group by scategoryname 
+		 order by count(scategoryname) desc) 
+	where rownum < 10
 	]]>
 	</select>
-
-
-
-
-
-
 </mapper>

@@ -565,7 +565,7 @@ top:-9px;
 												<label class="control-label" for="answer5">${quest5}</label><i class="mtrl-select"></i>
 											</div>
 										</c:if>
-										<c:if test="${introuduce ne null}">
+										<c:if test="${introduce ne null}">
 											<div class="form-group">
 												<textarea rows="4" id="introduce" name="introduce" required="required"></textarea>
 												<label class="control-label" for="introduce">${introduce}</label><i class="mtrl-select"></i>

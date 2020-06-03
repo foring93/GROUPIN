@@ -1578,8 +1578,8 @@ public class GroupController {
 	public Object signupSetting(JoinQuest quest, String groupkey) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println("=====================================================");
-		System.out.println(quest.getQuest1());
-		System.out.println(quest.getIntroduce());
+		System.out.println("자기소개 = " + quest.getIntroduce());
+		System.out.println("quest1 = " + quest.getQuest1());
 		System.out.println("=====================================================");
 		
 		int result = -1;
@@ -1597,28 +1597,40 @@ public class GroupController {
 			map.put("quest", quest);
 			map.put("groupkey", groupkey);
 			result = groupservice.addSignupSample(map);	
-			if (result == 1) {
-				map.clear();
-				List<JoinQuest> list = groupMemberService.getJoinSample(Integer.parseInt(groupkey));	// 현재 모임의 가입 양식 가져오기
-				if (!list.isEmpty()) {
-					map.put("quest1", list.get(0).getQuest1());
-					map.put("quest2", list.get(0).getQuest2());
-					map.put("quest3", list.get(0).getQuest3());
-					map.put("quest4", list.get(0).getQuest4());
-					map.put("quest5", list.get(0).getQuest5());
-					map.put("introduce", list.get(0).getIntroduce());
-				}
-				map.put("result", result);
-			}
+			
+			if (result == 1) 
+				map = getJoinSample(Integer.parseInt(groupkey));
+			
+			map.put("result", result);
 			break;
 		case 1:
 			// 가입양식 수정
 			map.put("quest", quest);
 			map.put("groupkey", groupkey);
 			result = groupservice.updateSignupSample(map);
+			
+			if (result == 1)
+				map = getJoinSample(Integer.parseInt(groupkey));
+			
+			map.put("result", result);
 			break;
 		}
 		return map;
+	}
+	
+	// 현재 모임의 가입 양식 가져오기
+	public Map<String, Object> getJoinSample (int groupkey) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<JoinQuest> list = groupMemberService.getJoinSample(groupkey);	
+		if (!list.isEmpty()) {
+			data.put("quest1", list.get(0).getQuest1());
+			data.put("quest2", list.get(0).getQuest2());
+			data.put("quest3", list.get(0).getQuest3());
+			data.put("quest4", list.get(0).getQuest4());
+			data.put("quest5", list.get(0).getQuest5());
+			data.put("introduce", list.get(0).getIntroduce());
+		}
+		return data;
 	}
 	
 	public Map<String, Object> pagination (int page, int limit, int listcount) {

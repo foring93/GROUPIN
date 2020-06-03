@@ -66,7 +66,6 @@ public class GroupDAO {
 		return sqlSession.selectList("group.groupboardlist", groupkey);
 	}
 
-	
 	public List<MemberList> groupmemberlist(int groupkey) {
 		return sqlSession.selectList("group.groupmemberlist", groupkey);
 	}
@@ -81,7 +80,6 @@ public class GroupDAO {
 
 	public void groupcalendarmemberinsert(Map<String, Object> map) {
 		sqlSession.insert("group.groupcalendarmemberinsert", map);
-
 	}
 
 	public List<CalendarMember> calendarmemberjoinbtn(Map<String, Integer> map) {
@@ -90,7 +88,6 @@ public class GroupDAO {
 
 	public void groupcalendarmemberdelete(Map<String, Integer> map) {
 		sqlSession.delete("group.groupcalendarmemberdelete", map);
-
 	}
 
 	public List<CalendarList> groupcalendarlist(Map<String, Object> map) {
@@ -104,7 +101,6 @@ public class GroupDAO {
 	public List<Shortschedule> shortscheduleselected(Map<String, Object> map) {
 		return sqlSession.selectList("group.shortscheduleselected", map);
 	}
-
 	
 	public void groupboardupdate(Map<String, Object> map) {
 		sqlSession.update("group.groupboardupdate", map);
@@ -112,7 +108,6 @@ public class GroupDAO {
 
 	public void groupboardinsert(Map<String, Object> map) {
 		sqlSession.insert("group.groupboardinsert", map);
-
 	}
 
 	public void groupboarddelete(int boardkey) {
@@ -145,17 +140,14 @@ public class GroupDAO {
 
 	public void addScheduleCalendar(Post post) {
 		sqlSession.insert("group.addschedulecalendar", post);
-		
 	}
 
-	
 	public void updateboardmap(int postkey) {
 		sqlSession.update("group.updateboardmap",postkey);
 	}
 
 	public List<GGroup> getGroupRank(Map<String, Integer> list) {
 		return sqlSession.selectList("group.getGroupRank", list);
-
 	}
 
 	public Post modifypost(int postkey) {
@@ -172,17 +164,14 @@ public class GroupDAO {
 
 	public void calendardeleteajax(Map<String, Integer> list) {
 		sqlSession.delete("group.calendardeleteajax",list);
-		
 	}
 
 	public void updateSchedule(Post post) {
 		sqlSession.update("group.updateschedule", post);
-		
 	}
 
 	public void updateScheduleCalendar(Post post) {
 		sqlSession.update("group.updateschedulecalendar", post);
-		
 	}
 
 	public List<MemberList> modifymemberm(int postkey) {
@@ -191,11 +180,10 @@ public class GroupDAO {
 
 	public void calendarstomajax(Map<String, Integer> list) {
 		sqlSession.update("group.calendarstomajax",list);
-		
 	}
+	
 	public void calendarmtosajax(Map<String, Integer> list) {
 		sqlSession.update("group.calendarmtosajax",list);
-		
 	}
 	
 	public int boardlistcount(int boardkey) {
@@ -208,13 +196,10 @@ public class GroupDAO {
 
 	public void scheduledelete(int postkey) {
 		sqlSession.delete("group.scheduledelete",postkey);
-		
 	}
 
-	
 	public void groupbasicupdate(Map<String, Object> list) {
 		sqlSession.update("group.groupbasicupdate",list);
-		
 	}
 
 	public List<Post> getboardlisty(Map<String, Integer> list) {
@@ -233,7 +218,6 @@ public class GroupDAO {
 		return sqlSession.selectOne("group.groupafterlist", groupkey);
 	}
 
-	
 	public void boardwriteinsert(Post post) {
 		sqlSession.insert("group.boardwriteinsert", post);
 	}
@@ -268,12 +252,10 @@ public class GroupDAO {
 
 	public void boardupdate(Post post) {
 		sqlSession.update("group.boardupdate", post);
-		
 	}
 
 	public void boarddelete(int postkey) {
 		sqlSession.delete("group.boarddelete", postkey);
-		
 	}
 
 	public List<MemberList> smodifymemberm(Map<String, Integer> map) {
@@ -286,5 +268,9 @@ public class GroupDAO {
 
 	public List<UserRegGroup> userreggroupl(Map<String, Integer> map) {
 		return sqlSession.selectList("group.userreggroupl", map);
+	}
+
+	public void deleteAnswer(Map<String, Object> map) {
+		sqlSession.delete("group.deleteAnswer", map);
 	}
 }

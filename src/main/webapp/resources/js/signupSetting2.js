@@ -1,7 +1,7 @@
 /* 모임장의 가입양식 수정 페이지 */
 $(function(){
-	var output = '';
 	var count = 0;
+	var output = '';
 	
 	/* 가입양식 추가 버튼 hover 이벤트 */
 	$('.addSample').hover(function() {
@@ -18,8 +18,8 @@ $(function(){
 	$('.addSample').click(function() {
 		output = '';
 		event.preventDefault();	// button 클릭 시 form 제출하는 이벤트 막기
-		
-		count = $('.form-group').length;	// 가입 양식의 개수 -- 기본적으로 '자기소개' 양식 때문에 1이다. 
+		count++;
+		console.log('count = ' + count);
 		
 		output += '<div class = "form-group">';
 		switch(count) {
@@ -69,10 +69,11 @@ $(function(){
 					
 					$('#signupSettingForm').html('');
 					
+					// dafault로 출력 
 					output += '<form id = "signupSettingForm">';
 					output += '	<div class = "form-group">';
 					output += '		<input type = "text" required = "required" name = "introduce">';
-					output += '		<label class = "control-label" for = "input">' + data.introduce + '</label><i class="mtrl-select"></i>';
+					output += '		<label class = "control-label" for = "input">자기소개를 입력해주세요.</label><i class="mtrl-select"></i>';
 					output += '	</div>';
 					
 					if (data.quest1 != null) {
@@ -130,12 +131,7 @@ $(function(){
 	/* 가입양식 삭제 버튼 클릭 시 */
 	$(document).on('click', '.removeBtn', function() {
 		event.preventDefault();
-		console.log('삭제할 인덱스 = ' + $(this).prev().index());		// 1, 3, 5, 7, 9
 		$(this).prev().remove();	// 클릭한 삭제버튼에 해당하는 폼 삭제
 		$(this).remove();			// 클릭한 삭제버튼도 삭제 
-		
-		
-		// 가입 양식 삭제 시 다음 차례에 있는 양식의 input name은 각각 -1씩 되어야 한다.
-		
 	});
 });

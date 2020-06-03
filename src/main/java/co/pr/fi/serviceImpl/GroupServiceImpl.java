@@ -570,40 +570,45 @@ public class GroupServiceImpl implements GroupService {
 		return post;
 	}
 
-@Override
-public void boardupdate(Post post) {
-	dao.boardupdate(post);
-}
-
-@Override
-public void boarddelete(int postkey) {
-	dao.boarddelete(postkey);
+	@Override
+	public void boardupdate(Post post) {
+		dao.boardupdate(post);
+	}
 	
-}
-@Override
-public List<MemberList> smodifymember(int postkey,int groupkey) {
-	Map<String, Integer> map = new HashMap<String, Integer>();
-	map.put("postkey", postkey);
-	map.put("groupkey", groupkey);
-	return dao.smodifymember(map);
-}
-
-@Override
-public List<MemberList> smodifymemberm(int postkey,int groupkey) {
-	Map<String, Integer> map = new HashMap<String, Integer>();
-	map.put("postkey", postkey);
-	map.put("groupkey", groupkey);
-	return dao.smodifymemberm(map);
-}
-
-@Override
-public List<UserRegGroup> userreggroupl(int page, int limit, int userkey) {
-	Map<String, Integer> map = new HashMap<String, Integer>();
-	int startrow = (page - 1) * limit + 1;
-	int endrow = startrow + limit - 1;
-	map.put("start", startrow);
-	map.put("end", endrow);
-	map.put("userkey", userkey);
-	return dao.userreggroupl(map);
-}
+	@Override
+	public void boarddelete(int postkey) {
+		dao.boarddelete(postkey);
+		
+	}
+	@Override
+	public List<MemberList> smodifymember(int postkey,int groupkey) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("postkey", postkey);
+		map.put("groupkey", groupkey);
+		return dao.smodifymember(map);
+	}
+	
+	@Override
+	public List<MemberList> smodifymemberm(int postkey,int groupkey) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("postkey", postkey);
+		map.put("groupkey", groupkey);
+		return dao.smodifymemberm(map);
+	}
+	
+	@Override
+	public List<UserRegGroup> userreggroupl(int page, int limit, int userkey) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		int startrow = (page - 1) * limit + 1;
+		int endrow = startrow + limit - 1;
+		map.put("start", startrow);
+		map.put("end", endrow);
+		map.put("userkey", userkey);
+		return dao.userreggroupl(map);
+	}
+	
+	@Override
+	public void deleteAnswer(Map<String, Object> map) {
+		dao.deleteAnswer(map);
+	}
 }
